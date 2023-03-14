@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cm-pod-file-vol
+spec:
+  volumes:
+    - name: mapvol
+      configMap:
+        name: my-niginix-config-file-cmd 
+  containers:
+    - name: test-container
+      image: nginx
+      volumeMounts:
+      - name: mapvol
+        mountPath: /etc/config
+  restartPolicy: Never

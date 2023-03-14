@@ -1,0 +1,48 @@
+mobiles:
+  mobile: "apple 13 pro"
+  model:  2022
+  price: 120000
+  is_released: true
+
+# array
+
+  tags:    
+    - ios
+    - iphone
+    - bestbuy
+  models: ["iphonne13" , "pro" , promax"]
+
+# array object
+
+  model_details:
+    - name: "iphone13"
+      battery: "5000mAh"
+      processor: "A16"
+    - name: "pro"
+      battery: "5000mAh"
+      processor: "A16"
+    - {name: "iphone13" , battery: "5000mAh" , processor: "A16" } 
+
+#dictionay
+
+ states_available: 
+    Delhi: "New Delhi"
+    Maharashtra: "mumbai"
+    Uttar_Pradesh: "lucknow"
+
+#decription
+
+ short_desc: >
+    here is a short 
+    descriptiom for iphones 
+
+ long_desc: |
+    now we can store
+      all intendation
+    and related things.
+
+#reference
+
+  process_payment: *price
+  
+   
