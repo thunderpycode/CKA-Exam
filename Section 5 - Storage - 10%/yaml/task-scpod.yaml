@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fast-pod
+spec:
+  volumes:
+    - name: task-sc-storage
+      persistentVolumeClaim:
+        claimName: fast-pvc
+  containers:
+    - name: task-pv-container
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: task-sc-storage
+
