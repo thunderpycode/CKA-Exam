@@ -1,0 +1,14 @@
+NAME                                        CPU(cores)   MEMORY(bytes)   
+mongo-deployment-6848b8457d-855r5           6m           306Mi           
+ingress-nginx-controller-6b94c75599-7pb9s   3m           286Mi           
+memory-demo                                 37m          151Mi           
+webapp-deployment-5c4579c8dd-4vprp          1m           88Mi            
+svcdisc                                     0m           21Mi            
+nginx-deploy-864bcf4b95-tvjg7               0m           12Mi            
+nginx-hostpath                              0m           12Mi            
+nginx-deployment-68b4f7974b-fhd2s           0m           12Mi            
+nginx-deploy-864bcf4b95-5gdtk               0m           12Mi            
+nginx-deploy-864bcf4b95-jlbbt               0m           12Mi            
+secret-vol-pod                              0m           12Mi            
+redis-pod                                   2m           7Mi             
+cpu-demo                                    937m         4Mi             
