@@ -1,0 +1,3 @@
+the deployment in DR Environment will follow the same process as production
+Do we have update on rtf runtime 4.3.0
+What the status for production 4.4.0 update?
