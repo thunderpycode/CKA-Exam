@@ -48,8 +48,8 @@ Create a daemon set
         apiVersion: apps/v1
         kind: DaemonSet
         metadata:
-        name: fluentd
-        namespace: kube-system
+            name: fluentd
+            namespace: kube-system
         labels:
             k8s-app: fluentd
         spec:
@@ -66,9 +66,49 @@ Create a daemon set
                 image: fluentd:latest
 
 Change the update strategy to do a rolling update but delaying 30 seconds between pod updates 
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+        name: myapp
+        spec:
+        replicas: 2
+        strategy: 
+        type: RollingUpdate
+        rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 25%
+            
+        selector:
+            matchLabels:
+                app: dev
+        template:
+            metadata:
+                labels:
+                app: dev
+            spec:
+            containers: 
+            - image: nginx:latest
+                name: myapp
+                ports:
+                - containerPort: 8080
+                livenessProbe:
+                httpGet:
+                    path: /
+                    port: 8080
+                initialDelaySeconds: 30
+        
         https://medium.com/platformer-blog/enable-rolling-updates-in-kubernetes-with-zero-downtime-31d7ec388c81
 Create a static pod
+        1. login to node
+        2. we have to plave static pod manifest in that directory where other static pods are placed
+        3. kubectl get pods >>> pod-name-[node_name] will be the static pod like etcd-master
+        4. sudo cat /var/lib/kubelet/config.yaml >>> see staticPodPath 
+        5. cd /etc/kubernetes/manifests >>> create pod file inside it and apply.
+
 Create a busybox container without a manifest. Then edit the manifest.
+        kubectl run -i -t busybox --image=busybox
+        kubectl edit pod busybox
+
 Create a pod that uses secrets
 Create a secret
 Pull secrets from environment variables
