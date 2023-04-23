@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-usr-pass
+  namespace: tets
+data:
+  username: YWRtaW4K
+  password: MTIzNAo=
+

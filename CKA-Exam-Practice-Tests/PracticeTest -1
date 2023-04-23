@@ -100,7 +100,7 @@ Change the update strategy to do a rolling update but delaying 30 seconds betwee
         https://medium.com/platformer-blog/enable-rolling-updates-in-kubernetes-with-zero-downtime-31d7ec388c81
 Create a static pod
         1. login to node
-        2. we have to plave static pod manifest in that directory where other static pods are placed
+        2. we have to place static pod manifest in that directory where other static pods are placed
         3. kubectl get pods >>> pod-name-[node_name] will be the static pod like etcd-master
         4. sudo cat /var/lib/kubelet/config.yaml >>> see staticPodPath 
         5. cd /etc/kubernetes/manifests >>> create pod file inside it and apply.
@@ -109,9 +109,17 @@ Create a busybox container without a manifest. Then edit the manifest.
         kubectl run -i -t busybox --image=busybox
         kubectl edit pod busybox
 
-Create a pod that uses secrets
+Create a pod that uses secrets -
+        C:\Users\abhishesrivasta6\Desktop\CKA Exam\CKA-Exam\Section 3 - Workloads and Scheduling - 15% 
+        Validate:
+        ---------
+        kubectl exec secret-env-pod -- env
+        kubectl exec secret-env-pod -- env | grep SECRET
+        
 Create a secret
-Pull secrets from environment variables
+        C:\Users\abhishesrivasta6\Desktop\CKA Exam\CKA-Exam\Section 3 - Workloads and Scheduling - 15% 
+
+Pull secrets from environment variables -- same as question "Create a pod that uses secrets"
 Pull secrets from a volume
 Dump the secrets out via kubectl to show it worked
 Create a job that runs every 3 minutes and prints out the current time.
