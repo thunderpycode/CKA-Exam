@@ -120,8 +120,19 @@ Create a secret
         C:\Users\abhishesrivasta6\Desktop\CKA Exam\CKA-Exam\Section 3 - Workloads and Scheduling - 15% 
 
 Pull secrets from environment variables -- same as question "Create a pod that uses secrets"
+
 Pull secrets from a volume
+         C:\Users\abhishesrivasta6\Desktop\CKA Exam\CKA-Exam\Section 3 - Workloads and Scheduling - 15% 
+         
 Dump the secrets out via kubectl to show it worked
+         Validate:for volume------->
+            kubectl exec secret-vol-pod -- ls /etc/secret-volume
+            kubectl exec secret-vol-pod -- cat /etc/secret-volume/username
+            kubectl exec secret-vol-pod -- cat /etc/secret-volume/password
+        Validate: for env variables
+            kubectl exec secret-env-pod -- env
+            kubectl exec secret-env-pod -- env | grep SECRET
+
 Create a job that runs every 3 minutes and prints out the current time.
 Create a job that runs 20 times, 5 containers at a time, and prints “Hello parallel world”
 Create a horizontal autoscaling group that starts with 2 pods and scales when CPU usage is over 50%.
