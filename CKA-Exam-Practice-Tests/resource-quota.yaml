@@ -1,0 +1,12 @@
+#this yaml is for giving particular cpu and memory quota to namespace
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+   name: namespace-quota
+   namespace: dev
+spec:
+   hard:
+      requests.cpu: "1"
+      limits.cpu: "2"
+      requests.memory: 1Gi
+      limits.memory: 2Gi

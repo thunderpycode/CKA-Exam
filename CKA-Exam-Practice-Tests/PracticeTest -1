@@ -72,12 +72,12 @@ Change the update strategy to do a rolling update but delaying 30 seconds betwee
         name: myapp
         spec:
         replicas: 2
-        strategy: 
-        type: RollingUpdate
-        rollingUpdate:
-            maxSurge: 1
-            maxUnavailable: 25%
-            
+            strategy: 
+            type: RollingUpdate
+            rollingUpdate:
+                maxSurge: 1
+                maxUnavailable: 25%
+                
         selector:
             matchLabels:
                 app: dev
@@ -134,26 +134,196 @@ Dump the secrets out via kubectl to show it worked
             kubectl exec secret-env-pod -- env | grep SECRET
 
 Create a job that runs every 3 minutes and prints out the current time.
+        C:\Users\abhishesrivasta6\Desktop\CKA Exam\CKA-Exam\Section 6 - Troubleshooting - 30%\yaml
+        for Cron job - we have yaml in practice test
+
 Create a job that runs 20 times, 5 containers at a time, and prints “Hello parallel world”
+        five-job.yaml
 Create a horizontal autoscaling group that starts with 2 pods and scales when CPU usage is over 50%.
-Create a custom resource definition - CRD
-Display it in the API with curl
+        Run hpa-group.yaml
+        kubectl autoscale deploy/hpa-pod --cpu-percent=50 --min=2 --max=10
+        kubectl get hpa
+        kubectl get hpa hpa-pod --watch
+
+Create a custom resource definition - CRD   |_________________________>https://www.techtarget.com/searchitoperations/tip/Learn-to-use-Kubernetes-CRDs-in-this-tutorial-example
+Display it in the API with curl             |                         >
+
 Create a networking policy such that only pods with the label access=granted can talk to it.
-Create a nginx pod and attach this policy to it.
-Create a busybox pod and attempt to talk to nginx - should be blocked
-Attach the label to busybox and try again - should be allowed
+        kind: NetworkPolicy
+        apiVersion: extensions/v1beta1
+        metadata:
+        name: access-nginx
+        spec:
+        podSelector:
+            matchLabels:
+            run: nginx
+        ingress:
+            - from:
+            - podSelector:
+                matchLabels:
+                    access: "true
+        
+        create pod with label: $ kubectl run busybox --rm -ti --labels="access=true" --image=busybox /bin/sh
+                                Waiting for pod default/busybox-472357175-y0m47 to be running, status is Pending, pod ready: false
+
+                                Hit enter for command prompt
+
+                                / # wget --spider --timeout=1 nginx
+                                Connecting to nginx (10.100.0.16:80)
+                                / #
+
+Create a nginx pod and attach this policy to it.---> add label of policy
+
+Create a busybox pod and attempt to talk to nginx - should be blocked ---->answered above
+Attach the label to busybox and try again - should be allowed --->answered above
+
 Create a service that references an externalname - https://api.github.com/users/prabhatsharma
+        What is an ExternalName service in Kubernetes?
+            An ExternalName service is a special case of service that does not have selectors. 
+            It does not define any ports or endpoints. Rather, it serves as a way to return an alias to an external service residing outside the cluster.
+            kind: Service
+            apiVersion: v1
+            metadata:
+              name: my-service
+              namespace: prod
+            spec:
+              type: ExternalName
+              externalName: https://api.github.com/users/prabhatsharma
+*usually spec in service has selector and port
+        https://kubernetes.io/docs/concepts/services-networking/service/
+        https://unofficial-kubernetes.readthedocs.io/en/latest/concepts/services-networking/service/#:~:text=An%20ExternalName%20service%20is%20a,service%20residing%20outside%20the%20cluster.
+
 Test that this works from another pod
-Create a pod that runs all processes as user 1000.
+Create a pod that runs all processes as user 1000. -
+        In the configuration file, the runAsUser field specifies that for any Containers in the Pod, all processes run with user ID 1000. 
+        The runAsGroup field specifies the primary group ID of 3000 for all processes within any containers of the Pod. 
+        If this field is omitted, the primary group ID of the containers will be root(0). 
+        Any files created will also be owned by user 1000 and group 3000 when runAsGroup is specified. 
+        Since fsGroup field is specified, all processes of the container are also part of the supplementary group ID 2000. 
+        The owner for volume /data/demo and any files created in that volume will be Group ID 2000.
+        apiVersion: v1
+        kind: Pod
+        metadata:
+        name: security-context-demo
+        spec:
+        securityContext:
+            runAsUser: 1000
+            runAsGroup: 3000
+            fsGroup: 2000
+        volumes:
+        - name: sec-ctx-vol
+        containers:
+        - name: sec-ctx-demo
+          image: busybox:1.28
+          command: [ "sh", "-c", "sleep 1h" ]
+          volumeMounts:
+          - name: sec-ctx-vol
+            mountPath: /data/demo
+
 Create a namespace
+        kubectl create namespace dev
+
 Run a pod in the new namespace
+        kubectl run demo-pod --image=busybox --namespace=dev
+
 Put memory limits on the namespace
+        apiVersion: v1
+        kind: ResourceQuota
+        metadata:
+        name: namespace-quota
+        namespace: dev
+        spec:
+        hard:
+            requests.cpu: "1"
+            limits.cpu: "2"
+            requests.memory: 1Gi
+            limits.memory: 2Gi
+
 Limit pods to 2 persistent volumes in this namespace
-Write an ingress rule that redirects calls to /foo to one service and to /bar to another
+
+Write an ingress rule that redirects calls to /foo to one service and to /bar to another 
+        create 2 services - C:\Users\abhishesrivasta6\Desktop\CKA Exam\CKA-Exam\Section 4 - Services and Networking - 20%/ Ingress++-+Practice+Guide.txt
+        write ingress as :
+        apiVersion: extensions/v1beta1  
+        kind: Ingress
+        metadata:
+        name: test-ingress
+        annotations:
+            ingress.kubernetes.io/rewrite-target: /
+        spec:
+        rules:
+        - http:
+            paths:
+                - path: /cat
+                backend:
+                    serviceName: cat-service
+                    servicePort: 5678
+                - path: /dog
+                backend:
+                    serviceName: dog-service
+                    servicePort: 5678
+
 Write a service that exposes nginx on a nodeport
-Change it to use a cluster port
-Scale the service
+         Service
+        # nginx-svc-np.yaml
+        apiVersion: v1
+        kind: Service	
+        metadata:
+        name: my-service
+        labels:
+            app: nginx-app
+        spec:
+            selector:
+                app: nginx-app
+            type: NodePort
+            ports:
+            - nodePort: 31111
+            port: 80
+            targetPort: 80
+Change it to use a cluster port 
+      kubectl  edit service  my-service --> change type to ClusterIP
+      OR---> $  kubectl patch svc my-service -p '{"spec":{"type": "ClusterIP"}}'
+                service/my-service patched
+
+Scale the service-> No answer
+
 Change it to use an external IP
+         kubectl patch svc my-service -p '{"spec":{"externalIPs":["192.168.0.194"]}}'
+        #service/my-service patched
+
 Change it to use a load balancer
+        $  kubectl patch svc my-service -p '{"spec":{"type": "LoadBalancer"}}'
+            service/my-service patched
+
+
 Deploy nginx with 3 replicas and then expose a port
+        kubect run nginx-replicas --image=nginx --replicas=3 --port=80
+
 Use port forwarding to talk to a specific port
+        $ kubectl create deploy nginx-pod-repicas --image=nginx --replicas=4 --port=80
+          kubectl expose pod pod_name --port=80
+
+          Ans->
+            Forward a local port to a port on the Pod
+            kubectl port-forward allows using resource name, such as a pod name, to select a matching pod to port forward to.
+
+            format: kubectl port-forward [resource-type]/[resource-name] [local-port]:[resource-port]
+
+            # Change mongo-75f59d57f4-4nd6q to the name of the Pod
+            kubectl port-forward mongo-75f59d57f4-4nd6q 28015:27017
+            which is the same as
+
+            kubectl port-forward pods/mongo-75f59d57f4-4nd6q 28015:27017
+            or
+
+            kubectl port-forward deployment/mongo 28015:27017
+            or
+
+            kubectl port-forward replicaset/mongo-75f59d57f4 28015:27017
+            or
+
+            kubectl port-forward service/mongo 28015:27017
+            Any of the above commands works. The output is similar to this:
+
+            Forwarding from 127.0.0.1:28015 -> 27017
+            Forwarding from [::1]:28015 -> 27017

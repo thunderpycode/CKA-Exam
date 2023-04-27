@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: five-counter-pod
+  labels:
+    app: webapp1
+spec:
+  containers:
+  - name: counter-1 
+    image: busybox
+    args: [/bin/sh, -c,
+            'i=0; while [ $i -eq 4 ]; do echo "From Counter-ONE: $i: $(date)"; i=$((i+1)); sleep 1; done']
+  - name: counter-2
+    image: busybox
+    args: [/bin/sh, -c,
+            'i=5; while [ $i -eq 8 ]; do echo "From Counter-TWO:  $i: $(date)"; i=$((i+1)); sleep 1; done']
+ 
+
