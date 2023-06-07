@@ -43,7 +43,6 @@ sudo systemctl status docker
 
 for error use : rm /etc/containerd/config.toml
 systemctl restart containerd
-kubeadm init
 
 
 

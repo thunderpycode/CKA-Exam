@@ -66,9 +66,9 @@ kubectl run nginx-pod --image=nginx
 kubectl run redis-pod --image=redis
 
 kubectl top nodes
-kubectl top nodes --sorty-by cpu
-kubectl top nodes --sorty-by memory
-kubectl top nodes --sorty-by memory > mem-out.txt
+kubectl top nodes --sort-by cpu
+kubectl top nodes --sort-by memory
+kubectl top nodes --sort-by memory > mem-out.txt
 
 
 ***************************************************************************************************
@@ -80,9 +80,9 @@ kubectl top nodes --sorty-by memory > mem-out.txt
 In Current Namepsace:
 ---------------------
 kubectl top pods
-kubectl top pods --sorty-by cpu
-kubectl top pods --sorty-by memory
-kubectl top pods --sorty-by memory > mem-out.txt
+kubectl top pods --sort-by cpu
+kubectl top pods --sort-by memory
+kubectl top pods --sort-by memory > mem-out.txt
 
 In Specific NameSpace:
 ----------------------

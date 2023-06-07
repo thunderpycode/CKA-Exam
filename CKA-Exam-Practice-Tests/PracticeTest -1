@@ -66,36 +66,37 @@ Create a daemon set
                 image: fluentd:latest
 
 Change the update strategy to do a rolling update but delaying 30 seconds between pod updates 
-        apiVersion: apps/v1
-        kind: Deployment
-        metadata:
-        name: myapp
-        spec:
-        replicas: 2
-            strategy: 
-            type: RollingUpdate
-            rollingUpdate:
-                maxSurge: 1
-                maxUnavailable: 25%
-                
-        selector:
-            matchLabels:
-                app: dev
-        template:
-            metadata:
-                labels:
-                app: dev
-            spec:
-            containers: 
-            - image: nginx:latest
-                name: myapp
-                ports:
-                - containerPort: 8080
-                livenessProbe:
-                httpGet:
-                    path: /
-                    port: 8080
-                initialDelaySeconds: 30
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 2
+  strategy: 
+   type: RollingUpdate
+   rollingUpdate:
+     maxSurge: 1
+     maxUnavailable: 25%
+     
+  selector:
+     matchLabels:
+        app: dev
+  template:
+     metadata:
+        labels:
+           app: dev
+     spec:
+       containers: 
+       - image: nginx:latest
+         name: myapp
+         ports:
+         ]
+         - containerPort: 8080
+         livenessProbe:
+          httpGet:
+             path: /
+             port: 8080
+          initialDelaySeconds: 30
         
         https://medium.com/platformer-blog/enable-rolling-updates-in-kubernetes-with-zero-downtime-31d7ec388c81
 Create a static pod
